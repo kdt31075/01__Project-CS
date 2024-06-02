@@ -1,0 +1,62 @@
+---
+theme: cosmo
+format: html
+editor: source
+execute :
+  echo: false
+  output: true
+  warning: false
+  error: false
+  freeze: auto
+  cache: true
+code-fold: true
+---
+
+# Deciles
+
+```{r load packages}
+# clear all 
+ #rm(list = ls()) 
+ #rm(list = ls(envir = globalenv()))
+
+# Load packages
+pacman::p_load(DBI, RMySQL, tidyverse, rio, here, skimr, lubridate, knitr,
+               scales, cowplot, grid, magick, tidyr, janitor, officer,
+               flextable, ggplot2, ggrepel, stringr, patchwork,
+               plotly, DT, RColorBrewer, xml2, downlit)
+```
+
+```{r calc deciles}
+
+# Load data
+  tmp_10 <- dta_subsidies
+
+# Summarise Amounts for different subsidies on Total
+  tmp_11 <- tmp_10 %>%
+    group_by(EntityNumber) %>%
+    summarise(Total = sum(Amount))
+
+# Check - Cals Grand Total tmp_GrandTotal  
+  tmp_GrandTotal <- tmp_11 %>%
+    summarise(myTot = sum(Total))
+
+# Place each value into a decile
+  tmp_11$decile <- ntile(tmp_11$Total, 10)
+  
+# Summarize data by decile  
+  rst_1 <- tmp_11 %>%
+  group_by(decile) %>%
+  summarize(start_amount = min(Total),
+            end_amount = max(Total),
+            count = n())  
+  
+# Bin the data into deciles
+  tmp_12 <- cut(tmp_11$Total, breaks = decile, labels = FALSE)
+
+# Count the number of enterprises in each decile
+  rst_2 <- table(tmp_12)
+
+# Print the number of enterprises in each decile
+  print(rst_2)
+
+```

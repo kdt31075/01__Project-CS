@@ -1,0 +1,330 @@
+---
+theme: cosmo
+format: html
+editor: source
+cache: true
+echo: false
+output: true
+warning: false
+error: false
+freeze: auto
+code-fold: true
+# number-offset: 0
+cls: chicago-fullnote-bibliography-no-em-dash.csl
+---
+
+# Inleiding {.unnumbered}
+
+## Aanleiding voor het onderzoek
+
+In het kader van de Covid-19 pandemie, beslist de Belgische overheid in het voorjaar van 2020 tot een verplichte sluiting van ondernemingen in bepaalde sectoren. De horeca, de cultuur- en amusements-sector, ondernemingen voor personenvervoer en de niet-essentiële winkels en contactberoepen, lijden onder de lockdown.
+
+Om massale faillissementen te vermijden en financiële drama's bij ondernemers te milderen voorzien regeringen in diverse maatregelen om ondernemingen en ondernemers financieel te steunen, onder meer met corona-premies (subsidies).
+
+In het kader van de openbaarheid van bestuur maakt Vlaio, de aan rechtspersonen toegekende subsidies, openbaar. Het wordt meteen duidelijk dat er vragen kunnen gesteld worden m.b.t. de efficiënte allocatie. Komen de subsidies terecht waar ze moeten terecht komen? De toekenningsvoorwaarden lijken erg breed, te weinig restrictief. Bovendien blijkt er, in de aanvangsfase, weinig of geen controle op de ingediende aanvragen.
+
+Bij een eerste verkennend onderzoek, voorafgaand aan deze studie, blijkt dat in de top-10 steuntrekkers
+
+-   4 op de 10 steuntrekkers een negatief Eigen Vermogen heeft
+-   7 op de 10 steuntrekkers een Overgedragen Verlies rapporteert
+-   slecht 1 van die 10 ondernemingen een positieve liquiditeit heeft (current ratio \> 1)
+-   negen van deze 10 ondernemingen maakt deel uit van de horeca en evenementen sector.
+
+De CHP-top-steuntrekker, **De Shop Evenementenhal, Antwerpen, ON 0546 941 626**, met een negatief eigen vermogen van meer dan 3 miljoen euro, ontvangt maar liefst 198.430€ steun en gaat daarna, op 11 mei 2021, failliet.\
+De onderneming, opgericht in 2014 heeft enkel het eerste boekjaar winst gemaakt : 527€. De daaropvolgende jaren wordt enkel verlies opgetekend.
+
+Dat dergelijke ondernemingen, **zombie**-ondernemingen[^1] genoemd, in het rechtsverkeer actief kunnen blijven, roept vragen op. Maar dat dergelijke ondernemingen subsidies kunnen ontvangen, gaat de verbeelding te boven. Dat deze subsidie compleet verloren zou gaan, was mits één enkele blik op de balans, feilloos te voorspellen. Dit is een economisch zinloze subsidie, een pure verspilling van belastinggeld.\
+Bovendien blijkt de onderneming gefraudeerd te hebben voor een deel van haar subsidie-aanvraag. Maar door het faillissement, zal Vlaio er niet in slagen de onterechte subsidie te recupereren.
+
+[^1]: Er worden meerdere definities gehanteerd voor zombie-kwalificatie.\
+    De OESO definieert ze als ondernemingen van minstens 10 jaar oud waarvan het bedrijfsresultaat, de afgelopen drie jaren, onvoldoende is om de intrestlasten te dekken. (Firms aged \>= 10 years and with an interest coverage ratio \< 1 over three consecutive years)\
+    Een andere definitie luidt: ondernemingen die minstens vijf jaar oud zijn én de laatste drie boekjaren telkens opnieuw een negatief eigen vermogen noteren.
+
+En *De Shop Evenementenhal* was niet het enige geval dat vragen opriep. Gaandeweg worden in het vooronderzoek pijnlijke vaststellingen gedaan. Soms duidelijke fraudegevallen, maar even vaak blijken entiteiten, volkomen legaal, torenhoge subsidies op te strijken, zonder dat daar economische behoefte aan is. (zie verder: o.a. de dividend uitkeerders)
+
+De vaststellingen uit het vooronderzoek worden in de pers bevestigd.[^2] We verwijzen ook naar het studiewerk van Graydon, waar directeur Eric Van den Broele vaststelt dat een deel van de coronasteun economisch gezien, verkeerd terecht komt.[^3]
+
+[^2]: o.a. Rasking, J. (2020, 17 december). Coronafraude in alle maten, groot en klein. *De Standaard*\
+    Renard, H. (2020, 1 juli). Misbruik met steunpakketten. Hier mag niet over gezwegen worden. *Knack*\
+    Bové, L. (2021, 3 oktober). Serieuze berg coronasteun onterecht toegekend. *De Tijd*
+
+[^3]: Van den Broele, E., Spook- en Zombiebedrijven versus Covid-19, Graydon Belgium\
+    <https://graydon.be/nl/studie-spook-en-zombiebedrijven-belgie>
+
+In een rapport van 14 april 2020 [@OESO20200414]waarschuwt de OESO reeds voor problemen met de corona steunmaatregelen. Ze wijzen op het gevaar van het verwarren van acute liquiditeitsproblemen met structurele liquiditeitstekorten.
+
+Twee maand later[@OESO20200615] waarschuwt de organisatie voor fraude met de coronasteun.
+
+In Nederland starten financiële instellingen met een verhoogd toezicht door multi-disciplinaire teams en dragen zo bij tot de fraude preventie en bestrijding.[@NOS20200520]
+
+Onbegrijpelijk dat overheden, niet alleen de Belgische en Vlaamse, de fraude heeft zich immers in de hele Westerse wereld voorgedaan, niet meer beveiligingen en controles hebben ingebouwd, niettegenstaande de vele waarschuwingen. Voor zover ons bekend is de fraudepreventie inzake Covid-19 in ons land zeer beperkt geweest. Het hoeft dan ook niet te verbazen dat velen schaamteloos misbruik maakten van de situatie en onterecht - niet conform de wettelijke bepalingen - duizenden euro's binnenhalen. Deze publicatie wil aan de hand van enkele gevalsudies een exemplarisch beeld schetsen van grove misbruiken en vragen stellen bij de opportuniteit van subsidies. Het ligt voor de hand dat ons de middelen ontbreken voor een exhaustieve benadering.
+
+Wanneer blijkt dat andere landen (Nederland, Zwitserland[^4], ... ) zich gefocust hebben op het **herfinancieren van ondernemingen door middel van (terugbetaalbare) kredieten** in plaatse van definitief verworven subsidies, dan is de verontwaardiging over zo veel Vlaamse verspilzucht rechtstreeks aanleiding geweest voor verder onderzoek.
+
+[^4]: De Zwitserse overheid biedt kredietgaranties aan financiële instellingen, waardoor deze bereid zijn leningen te verstrekken aan bedrijven die anders mogelijk moeilijkheden zouden ondervinden bij het verkrijgen van financiering. Vooraleer het ondersteuningskrediet toe te kennen aan de ondernemingen, doen die banken een onderzoek naar de kredietwaardigheid. Wanneer de onderneming later niet in staat blijkt het ondersteuningkrediet terug te betalen, staat de overheid (gedeeltelijk) garant:\
+    - krediet tot 500.000 CHF: de Zwitserse overheid staat 100% garant\
+    - krediet groter dan 500.000 CHF en - kleiner dan 20 miljoen CHF : overheidsgarantie voor 85% van het krediet. De bank draait zelf op voor 15% van het verstrekte krediet. Door de toetsing van de kredietwaardigheid bij de bank te leggen en haar mee in het bad te trekken, wordt misbruik voorkomen.\
+    <https://covid19.easygov.swiss/en/#anchor-6>
+
+## Afbakening van het werkterrein
+
+In dit onderzoek worden enkel de subsidies aan rechtspersonen van het Vlaamse Gewest bestudeerd, toegekend in de periode 2020-2022 in het kader van de covid-19 pandemie. De Brusselse en Waalse subsidies komen niet aan bod. Aangezien enkel de premies, verstrekt aan rechtspersonen, gepubliceerd werden, vallen subsidies aan natuurlijke personen, buiten het onderzoek.
+
+## Huidige kennis over vermeende fraude met corona-subsidies
+
+In diverse kranten kwam het fraudeprobleem aan bod. Vaak zijn de artikels gepubliceerd op basis van Graydon studies. Dit studiebureau was voor de aanvang van de pandemie al actief op het terrein van spook- en zombiebedrijven. Bij de uitbraak van covid-19 werd de focus gelegd op de problematiek van subsidies. De onderneming heeft een 9-grid model ontwikkeld waarbij ondernemingen geclassificeerd worden in een tabel met 9 cellen op basis van hun financiële gezondheid voor de corona uitbraak en hun gevoeligheid voor schokken in de economie.
+
+In de publicaties van Graydon worden vermeende fraudezaken niet bij naam genoemd.
+
+Deze publicatie wil enkele merkwaardige vaststellingen kenbaar maken. Om de controle op de juistheid van de beweringen mogelijk te maken werd er in deze studie voor gekozen de betrokken ondernemingen te identificeren. De gebruikte gegevens zijn beschikbaar in voor het publiek toegankelijke databanken.
+
+## Huidige kennis over vermeende fraude met corona-subsidies
+
+Volgende punten worden achtereenvolgens behandeld:
+
+-   de federale premies en de premies van het Vlaamse Gewest: toekenningsvoorwaarden, bedrag en numerieke samengevatting (deel 1)
+
+-   de federale premies
+
+    -   in een aantal economische sectoren en
+    -   in het kader van een aantal specifieke juridisch-economische toestanden: niet-economische entiteiten, starters, discontinuïteit, inactiviteit.
+
+-   een aantal fraudemechanisme besproken geïllustreerd aan de hand van concrete gevallen: spookvennootschappen, zombievennootschappen, nieuw-opgerichte vennootschappen, faillissement-erende steuntrekkers, 'vestigings'misbruik, ... (deel 3)
+
+-   een poging ondernomen om de effectiviteit en efficiëntie van de premies te beoordelen (deel 4). Daarbij wordt een instrument ontwikkeld, een financiële 'RobuustheidsIndex', en simuleren we de financiële toestand met en zonder subsidie aan de hand van de robuustheidsindex. We simulerende economische situatie van de onderneming indien zij geen subsidie had ontvangen maar wel een krediet ter ondersteuning van de kapitaalbehoefte.
+
+    In elk deel zal er gewezen worden op (vermeende) misbruiken en inefficiëntie van de toegekende premies voor bepaalde (groepen van) entiteiten.
+
+## Bronnen
+
+Voor dit rapport werd gebruik gemaakt van de door Vlaio[^5] vrijgegeven bestanden met subsidies, toegekend aan rechtspersonen. Subsidies toegekend aan niet-rechtspersonen (natuurlijke personen handelaar of vrije beroeper) werden niet publiek gemaakt en vallen dus buiten deze studie.\
+De Vlaio-bestanden werden gekoppeld aan de KBO[^6]-bestanden. Deze bestanden blinken, om diverse redenen, niet uit in kwaliteit [@Graydon2014]. Tijdens het onderzoek is nog maar eens gebleken hoe onbetrouwbaar de vermelde nacecode (activiteitscode) is.
+
+[^5]: Agentschap Innoveren & Ondernemen\
+    <https://www.vlaio.be/nl/over-ons/cijfers-en-rapporten>
+
+[^6]: Kruispuntbank Ondernemingen\
+    <https://economie.fgov.be/nl/themas/ondernemingen/kruispuntbank-van/diensten-voor-iedereen/raadpleging-en-opzoeking-van/kruispuntbank-van>
+
+::: {.callout-note collapse="true" appearance="simple"}
+## Waarom geeft de nacecode niet altijd de werkelijke activiteit weer?
+
+::: {style="width:800px;   margin:0 auto;   word-wrap:break-word;"}
+(1) *De codes worden toegekend door verschillende instellingen: ondernemingsloket, RSZ, BTW. Deze organisaties hebben soms onvoldoende informatie om een correcte inschrijving te doen. Soms begrijpt de ondernemer zelf niet waarvoor hij inschrijft:*
+
+-   zelfstandig verpleegster, schoonheidsspecialiste, tandtechnisch labo, ... geregisreerd als klinisch laboratorium (86901 - Activiteiten van medische laboratoria)
+-   102 steuntrekkende artsen (huisartsen, urologen, neurologen, radiologen, ...) verkeerdelijk geclassificeerd als klinisch labo
+-   meerdere artsen ingeschreven zonder activiteitscode. Zoeken op 'dokter' in de benaming van de entiteit levert vreemde resultaten op. De Vachtdokter, de Keteldokter, de Bouwdokter, Iphonedokter, Spindokter, ...
+-   reinigingsbedrijf (0700.190.639) ingeschreven bij de 'praktijken van specialisten' (=geneesheer-specialisten)
+-   een kiné-praktijk (0818.161.445) ingeschreven onder code '62.020 - Computerconsultancy'
+
+(2) *Wanneer aandelen van een onderneming worden overgenomen om oprichtingskosten en oprichtersaansprakelijkheid te omzeilen, wordt de nacecode van de overlater niet altijd aangepast aan de activiteit van de overnemer:*
+
+-   bar/club met nacecode 'boekhouder'
+-   kapster met nacecode 'boekhouder'
+-   accountantskantoor omgevormd naar "Thai Fidelity Coocking" maar met nacecode van accountant (faillissement 4 april 2023)
+
+(3) *Vaak worden meerdere activiteiten verenigd in één rechtspersoon. Soms is dit een bijkomende activiteit, soms is dit de activiteit van de partner. Uiteraard zorgt dit voor verwarring.*
+
+-   nacecode '86.230 -tandartspraktijk' samen met de code '55.209 - Vakantieverblijven'
+-   kinesistenpraktijk (0471.609.545) maar in de statuten lezen we 'uitbating van een laboratorium in de meest uitgebreide zin'. Quid? Hierdoor staat in de KBO als eerste activiteit de code '86.901 - Activiteiten van klinische laboratoria' en op de tweede plaats '89.905 - Ambulante revalidatieactivitetien', wat staat voor kinesist.
+
+(4) *Vroeger was het gebruikelijk vennootschappen op te richten met een zo breed mogelijk doel. En dus vroeg men ook nacecodes aan voor zo wat alle mogelijke activiteiten.*\
+    Gebroeders De Temmerman, Halle, bouw/renovatiebedrijf, ON 0400.000.680 en vestigingsnummer 2.029.754.593 staat ingeschreven voor maar liefst 149 nacecodes. \[USE kbo; SELECT \* FROM activity WHERE EntityNumber REGEXP '0400.000.680\|2.029.754.593' \>\> *149 row(s) returned*\]
+:::
+:::
+
+Bij meer gericht onderzoek, werden de jaarrekeningen gedownload via de NBB[^7] in XBRL-formaat. Soms doen ondernemingen een stap achteruit en publiceren ze niet meer in xbrl- maar in pdf-formaat. Onbegrijpelijk dat dit formaat nog toegelaten is voor de niet-uitzonderingscategorieën. Dit betekent dat de gegevens manueel moeten worden overgedragen. Er werd voor geopteerd dergelijk entiteiten uit het onderzoek te weren. Hoogst uitzonderlijk werd ze toch opgenomen.\
+\
+
+[^7]: NBB: Nationale Bank België, Balanscentrale\
+    <https://www.nbb.be/nl/balanscentrale/gegevens-raadplegen/consult>
+
+In de analyse ontbreekt een update bestand van de KBO voor 2020. De KBO was niet bereid dit bestand te bezorgen. Hierdoor zijn de juridische toestand en Nacecodes van een 105 entiteiten niet bekend. In de analyse komen ze voor met een blanco veld, de vermelding 'Not Available', 'n/a', 'n.a.', 'NU', in functie van de gebruikte software.
+
+```{r INL01 Load & Execute code 00 Data Import}
+#| code-fold: true
+
+# ______________________________________________________________________________ 
+#  CHUNK INL01 - kdt - 2023-12-15
+#  Functionality : Load & Execute code '00_DataImport'
+#  
+#  DON'T EXECUTE WHEN .rds FILES EXISTS  
+# ______________________________________________________________________________
+
+# Load packages
+  pacman::p_load(DBI, RMySQL, tidyverse, rio, here, skimr, lubridate, knitr,
+               scales, cowplot, grid, magick, tidyr, janitor, officer,
+               flextable, ggplot2, ggrepel, stringr, patchwork,
+               plotly, DT, RColorBrewer, xml2, downlit)
+
+# Use source to call the code from '00 Data Import'
+  flt_1 <- here("Data", "Processed Data", "s_join_EnDeAdAcSu.rds")
+
+# Check if the file exists  "!" reverse the result from TRUE to FALSE
+  if (!file.exists(flt_1)) {
+    tmp_2 = here("Scripts", "00_DataImport.R")
+  source(tmp_2)
+ }
+
+```
+
+## Corona steunmaatregelen
+
+Een verplichte sluiting heeft voor ondernemingen gevolgen zowel aan de vraag- als de aanbodzijde. Enerzijds leidt de sluiting van de fysieke contactplaats tot een aanzienlijk of totaal omzetverlies. Anderzijds leidt het stopzetten van leveringen door leveranciers en het verplicht thuisblijven van de werknemers, tot het stilvallen van het productieproces.
+
+Om massale faillissementen te vermijden en financiële drama's bij ondernemers te milderen voorzien regeringen in diverse maatregelen om ondernemingen en ondernemers financieel te steunen.
+
+Door de verschillende beleisdniveaus in ons land worden om miljarden euro 's steun toegekend, in de vorm van premies, uitkeringen, ten laste neming van loonlasten, ... maar zonder dat daar, zeker aan het begin van de coronacrisis, toezicht wordt op georganiseerd. Subsidies worden toegekend op basis van een eenvoudige 'verklaring op eer'.
+
+Wanneer een overheid subsidies toekent, en zeker wanneer controle ontbreekt, is de kans groot dat een deel van deze openbare geldmiddelen wordt misbruikt. De overheid heeft als taak zorgzaam om te springen met deze gelden. In deze is dat niet gebeurd met urgentie als argument.
+
+## Drie pijlers van de crisisondersteuning
+
+Regeringen voorzien in drie financieel ondersteunende maatregelen:
+
+-   **Wage compensation** (compensatie loonlast, short-time working, Kurzarbeit): de overheid neemt de loonlast geheel of gedeeltelijk ten laste;
+
+-   **Income replacement** (inkomensondersteuning) zelfstandigen en bestuurders van ondernemingen krijgen inkomenssteun om de weggevallen inkomsten te compenseren;
+
+-   **Corona loans**: ondernemingen kunnen via de overheid lenen aan zeer gunstige voorwaarden. Soms stelt de overheid zich garant. Soms wordt de terugbetaling van de lening gemoduleerd door parameters zoals het toekomstige rendement.
+
+In België werd de **compensatie voor de loonlast** gerealiseerd door de invoering van [*Tijdelijke Werkloosheid*]{.underline} voor de door verplichte sluiting getroffen werknemers.
+
+**Inkomensondersteuning** wordt door de Federale Overheid toegekend in de vorm van het reeds bestaande '[*overbruggingsrecht*]{.underline}' dat naar aanleiding van de covidcrisis, voor sommigen, verdubbeld wordt tot 3.228€ per maand. De regeling van het overbruggingsrecht voorziet dat er recht is op een uitkering voor elke maand waarin de ondernemers [minstens één dag]{.underline} onder de gedwongen sluitingsmaatregelen valt. Maar de ondersteuning wordt al gauw uitgebreid tot ondernemingen die ook "[vrijwillig]{.underline} minstens 7 opeenvolgende dagen sluiten". Bovendien kan er gecumuleerd worden met andere inkomsten zoals een inkomen als loontrekker of ambtenaar of zelf een loon als bestuurder uit de eigen vennootschap.
+
+**Corona leningen** werden ter beschikking gesteld mits de onderneming voldeed aan een aantal criteria inzake intrinsieke gezondheid en levensvatbaarheid (o.a. recurrente positieve kasstromen, geen negatief eigen vermogen, ...)
+
+Bovenop de **federale** inkomensondersteuning, kunnen zelfstandigen en ondernemingen bijkomend een beroep kunnen doen op **gewestelijk** financiële ondersteuning voor de dekking van de vaste kosten, in de vorm van subsidies zoals de forfaitaire Corona Hinderpremie (CHP)[^8].
+
+[^8]: Voor een overzicht van alle premies/subsidies, zie @tbl-overzicht-wetgeving
+
+```{r INL-01b summary-CHP}
+
+# ______________________________________________________________________________
+# INL-01b summary-CHP
+# kdt 2024-01-17
+# Functionality : 
+# Summary of entities with a CHP  
+# ______________________________________________________________________________
+
+# Create summary 
+  dfr_s_join <- import(here("Data", "Processed Data", "s_join_EnDeAdAcSu.rds"))
+  dfr_nacebel <- import(here("Data", "Raw Data", "nacebel_2008.csv"))
+  
+  tmp_1 <- dfr_s_join %>%
+    mutate(L4 = substr(NaceCode,1,4))
+  
+  tmp_2 <- tmp_1 %>%
+    filter(CHP >= 0) %>%
+    group_by(L4) %>%
+    summarize(count = n(), max_amount = max(CHP)) %>%
+    arrange(desc(max_amount), desc(count))
+  
+  sum_total <- tmp_2 %>%
+    summarize(total=sum(count))
+  
+  sum_1 <- left_join(tmp_2, dfr_nacebel,  join_by (L4 == Code)) %>%
+    select(L4, Label_NL, count, max_amount)
+  
+  colnames(sum_1) <- c("NaceC.", "Omschrijving", "Aantal", "Max bedrag")
+ 
+# Clean up
+  rm(list = ls(pattern="(^tmp_|^dfr_)"))
+```
+
+De toekenning van de gewestelijke subsidies wordt toevertrouwd aan Vlaio, het 'Agentschap Innoveren en Ondernemen'. Aangezien de toekenningsvoorwaarden heel beperkt zijn vragen `r format(sum_total, big.mark =" ")` entiteiten de Corona Hinderpremie aan. De eerste in een reeks van 17 premies.
+
+Voor het verwerven van de CHP, is het omzetcijfer of het bedrijfsresultaat van de onderneming irrelevant. Zowat iedereen die 'verplicht gesloten' is, kan vanaf maart 2020 maandelijks de 4.000€ belastingvrije Hinderpremie ontvangen.[^9] Vanaf april 2020 wordt dit bedrag verhoogd met een sluitingspremie[^10] van 160€ per sluitingsdag, samen goed voor een 7.200€ per maand. Hinderpremie en sluitingspremie worden toegekend, ongeacht de omzet. Zelf al heeft de betrokkene nooit winst gemaakt! Bovendien wordt de premie toegekend per vestiging met een maximum van 5. Een rekensom leert dat men in Vlaanderen **maandelijks** ongeveer 36.000€ Hinderpremie netto kon ontvangen[^11]. *En dit terwijl het netto belastbaar **jaarinkomen** van de Vlaming gemiddeld 20.357€ bedraagt voor 2021*[^12].
+
+[^9]: Hinderpremie\
+    <https://etaamb.openjustice.be/nl/besluit-van-de-vlaamse-regering-van-20-maart-2020_n2020030417.html>\
+
+[^10]: Sluitingspremie\
+    <https://etaamb.openjustice.be/nl/besluit-van-de-vlaamse-regering-van-20-maart-2020_n2020030417.html>\
+
+[^11]: Een voorbeeld:\
+    *Een ondernemer met vijf vestigingen kan volgend bedrag [maandelijks]{.underline}, als steun ontvangen :*\
+    - *4.000€ CHP x 5 (vestigingen) = 20.000€ (belastingvrij)*\
+    - *3.200€ CHP sluitingspremie (160€/dag) x 5 = 16.000€ (belastingvrij)*\
+    - *3.228€ Dubbel overbruggingsrecht (16,5% PB)*\
+    *Totaal bruto: 39.228€*\
+    *Totaal netto: 20.000€ + 16.000€ + (1 -- 0,165) x 3.228€ = 38.695€*\
+    *Dit is het equivalent zijn van een netto jaarinkomen van 464.340€, of, een belastbaar jaarinkomen van 677.936€.(personenbelasting gemiddelde aanslagvoet 46%)*
+
+[^12]: <https://statbel.fgov.be/nl/themas/huishoudens/fiscale-inkomens>
+
+Natuurlijk dient de CHP ook om vaste kosten te dekken. Maar in België is het niet eenvoudig om de steun te koppelen aan het bedrag van de vaste kosten, aangezien de jaarrekening geen onderscheid maakt tussen vaste en variabele kosten. Een individuele opgave van de vaste kosten eisen zou niet realistisch geweest zijn. In tegenstelling tot België, heeft Nederland daar wel een oplossing voor.
+
+::: {.callout-note collapse="true" appearance="simple"}
+## Nederland: Vaste Lasten als sectorale parameter
+
+In Nederland gebruikte men voor de berekening van de 'Tegemoetkoming Vaste Lasten', een parameter, berekend als een percentage van de omzet, in functie van de sector. Voor zover wij weten beschikt België niet over dergelijk instrument, wat met het oog op toekomstige crises toch bijzonder nuttig zou kunnen zijn.
+
+TVL - Tegemoetkoming Vaste Lasten: normale omzet x omzetverlies in % x aandeel vaste lasten in % x 50%.
+
+De vaste lasten werden niet individueel berekend maar vastgesteld per sector. Voor een overzicht van de sectorale percentage. <https://wetten.overheid.nl/BWBR0044808/2021-02-13#Bijlage>
+:::
+
+\
+
+@fig-summary-CHP-20000 toont het aantal ondernemingen, opgesplitst per sector, dat een Corona Hinderpremie ontving en het maximaal bedrag van de toegekende hinderpremie.
+\
+
+```{=html}
+<style>
+.CenterTable {
+  margin: auto;
+  width: 90%
+ }
+</style>
+```
+::: CenterTable
+
+```{r INL-01b fig-summary-CHP-20000}
+#| label: fig-summary-CHP-20000
+#| fig-cap: Aantal entiteiten met een CHP en maximaal bedrag van de CHP
+#| fig-cap-location: top
+
+# ______________________________________________________________________________
+# INL-01b fig-summary-CHP-20000
+# kdt 2023-12-01
+# Functionality : 
+# Create flextable from summary entities with CHP > 20.000€  
+# ______________________________________________________________________________
+
+# Your DataTable creation
+  dta_1 <- datatable(sum_1[, c("NaceC.", "Omschrijving", "Aantal", "Max bedrag")],
+                     rownames = FALSE,
+                     filter = 'none',
+                     class = "compact hover stripe",
+                     options = list(pageLength =18,
+                                    lengthChange = FALSE,
+                                    paging = TRUE,
+                                    searching = FALSE,
+                                    autoWidth = FALSE,
+                                    scrollY = "200 px",
+                                    columnDefs = list(list(className = 'dt-left', targets = 0:1))
+                     ))
+
+# Apply custom styles for font family, row height, and font size
+  dta_1 <- dta_1 %>%
+  formatStyle(
+    names(sum_1),
+    fontFamily = 'Calibri',
+    fontSize = '14px',
+    lineHeight = '1'
+  ) %>%
+  formatCurrency(
+    columns = 'Max bedrag',
+    currency = '',
+    digits = 0,
+    interval = 3,
+    mark = ' ') 
+
+# Display the styled DataTable
+  dta_1
+
+```
+:::
+

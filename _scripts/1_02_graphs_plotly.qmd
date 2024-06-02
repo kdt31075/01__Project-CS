@@ -1,0 +1,335 @@
+---
+theme: cosmo
+format: html
+editor: source
+execute :
+  echo: false
+  output: true
+  warning: false
+  error: false
+  freeze: auto
+  cache: true
+code-fold: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r load packages}
+# clear all 
+ rm(list = ls()) 
+ rm(list = ls(envir = globalenv()))
+
+# Load packages
+pacman::p_load(DBI, RMySQL, tidyverse, rio, here, skimr, lubridate, knitr,
+               scales, grid, tidyr, janitor, officer, flextable, ggplot2,
+               ggrepel, stringr, patchwork, plotly)
+
+options(plotly.renderer = "plotly_mimetype+quarto")
+
+setwd("D:/Documents/03__Coronasubsidies/81__Book")
+```
+
+```{r color palettes}
+# color palettes
+  blue.6 <-  c("#9BBBFE", "#8DAFFC", "#7FA2F9", "#7192F2", "#6383EA", "#5C7BE4")
+  palette.17 <- c("#BB4D7A", "#FDAF8A", "#FFD1B5", blue.6,
+                "#B5B0F2", "#ABA7E6", "#9E9BD9", "#8D8BC2", "#807EB0", "#7977A6",
+                "#A4C2A9", "#91AB95")
+  palette.15 <- c("#BB4D7A", "#FDAF8A", "#FFD1B5", blue.6,
+                "#B5B0F2", "#ABA7E6", "#9E9BD9", "#8D8BC2", "#807EB0", "#7977A6")
+```
+
+
+```{r 03 LOAD DATA for barcharts request-per-entity&type}
+
+# ______________________________________________________________________________ 
+# 03 LOAD DATA for barcharts request-per-entity&type
+# KDT - 2023-12-23
+# Functionality : 
+# INTRO: LOAD DATA - WRANGLING - CREATE df's for PLOTS AND FLEXTABLES
+#   1. fig-barchart-requests-per-entity   << rst_subsidies.requests_per_entity
+#   2. fig-barchart-requests-per-subsidy  << rst_subsidies.requests_per_type
+# ______________________________________________________________________________
+
+# |1| -- Data wrangling - flt_1/3 - Requests per entity/subsidy
+
+# Import
+  dta_subsidies <- readRDS("Data/Processed Data/subsidies.rds")
+
+# MASTER DATAFRAME rst_subsidies
+  # Add number of requests per entity >> nRequests
+    rst_subsidies <- dta_subsidies %>%
+      add_count(EntityNumber, name = "nRequests") 
+  
+  # Count requests per entity >> nCount_entity  
+    rst_entity <- rst_subsidies %>% 
+      count(nRequests, name = "nCount_entity") 
+  
+  # Count requests per type >> nCount_type
+    rst_subsidy <- rst_subsidies %>%
+      count(Subsidy, name = "nCount_type")
+  
+# Volgorde van de x-waarden in plots vastleggen >> factors 
+  # dataframe aanmaken met naam premies en volgnummer voor ordening
+  tmp_vc1 <- c("CHP", "CCP", "COP", "V01", "V02", "V03", "V04", "V05",
+              "V06", "V07", "V08", "V09", "V10", "V11", "V12", "GM1", "GM2")
+  tmp_vc2 <- seq(1, 17)  
+    
+# Make categoricals and sort
+  rst_subsidy$Subsidy = ordered(rst_subsidy$Subsidy, levels=tmp_vc1)
+  rst_subsidy <- rst_subsidy %>% 
+  arrange(factor(Subsidy))
+
+```
+
+```{r 04A barchart requests-per-entity }
+#| label: fig-barchart-requests-per-entity
+#| fig-cap: Aantal aangevraagde corona subsidies per entiteit
+#| fig-cap-location: top
+
+# ______________________________________________________________________________
+# 04A barchart requests-per-entity -  kdt 2023-12-25
+# functionality :
+# CREATE BAR CHARTS with request data
+#  1. fig-barchart-requests-per-entity   << rst_subsidies.requests_per_entity  
+#  2. fig-barchart-requests-per-subsidy  << rst_subsidies.requests_per_type
+# ______________________________________________________________________________
+  
+# [2] -- Create BAR CHARTS -- plt_Subsidies.Requests_per_entity & type
+
+# # [2A] bar chart 1 >> plt_subsidies.requests_per_type
+
+
+# Create plot  
+  plt_1 <- plot_ly(
+    data = rst_entity,                             
+    x = ~nRequests,
+    y = ~nCount_entity,
+    type = 'bar',
+    hoverinfo = 'none', 
+    color = "#78C2C0", # ~nRequests,
+    colors = "#78C2C0", 
+    opacity = .90,       
+    showlegend = FALSE) %>%
+      layout(title = list(text = "<span style='text-align: left;'>  </span>", x = 0.01),
+             autosize = T, margin = list(l=0, r=0, b=20, t=50, pad=0),
+             yaxis = list(title = "<span>Aantal entiteiten <br> </span>",
+                          tickformat = ",d", range = c(0, 60000), showline = FALSE),
+             xaxis = list(type = 'category',
+                          title = "<span> Aantal aangevraagde subsidies per entiteit <br> </span>",
+                          tickmode='linear'),
+             plot_bgcolor = "white",  # Set the background color of the plot to white
+             paper_bgcolor = "white", #  to remove any additional background color
+             margin = list(l = 50, r = 50, b = 50, t = 50, pad = 4),
+             bordercolor = "darkgrey",  
+             borderwidth = 4) %>%
+      config(displayModeBar = FALSE)
+
+plt_1
+  
+# Save as html
+ # htmlwidgets::saveWidget(plt_1, file="_images/plt_subsidies_requests_per_entity.html", selfcontained = TRUE)
+
+
+  # title = list(text = "<span style='text-align: left;'>Aantal entiteiten / Aantal aangevraagde subsidies per entiteit </span>", x = 0.01)
+  # For interactivity :
+  # hovertemplate = 'Entity: %NG: %{x}<br>Total: %{y:,.0f}',
+  # hoverlabel = list(font = list(size = 11, color = ~nRequests, opacity=0.7, family = 'Arial', textalign = 'left')),
+  # hoverinfo = 'x+y')
+  
+
+```
+
+```{r 04B barchart-requests-per-type}
+#| label: fig-barchart-requests-per-type
+#| results: asis
+#| fig-cap: Aantal aanvragen per subsidie
+#| fig-cap-location: top
+
+# ______________________________________________________________________________
+# INL-04B barchart requests-per-type
+# kdt 2023-12-25
+# functionality :
+# CREATE BAR CHARTS with request data
+#   1. fig-barchart-requests-per-entity   << rst_subsidies.requests_per_entity  
+#   2. fig-barchart-requests-per-subsidy  << rst_subsidies.requests_per_type
+# ______________________________________________________________________________
+  
+# |2| -- Create BAR CHARTS -- plt_Subsidies.Requests_per_entity & type
+
+# |2B| bar chart 2 >> plt_subsidies.requests_per_type     
+
+# Create plot
+  plt_2 <- plot_ly(
+    data = rst_subsidy,                             
+    x = ~Subsidy,
+    y = ~nCount_type,
+    type = 'bar',
+    hoverinfo = 'none', 
+    color = ~Subsidy,
+    colors = palette.17,
+    opacity= .90,
+    showlegend = FALSE)  %>%
+      layout(autosize = T, margin = list(l=0, r=25, b=40, t=50, pad=0),
+             yaxis = list(title = "<span>Aantal entiteiten <br> </span>",
+                          tickformat = ",d",tickformat = ",d", range = c(0, 60000)), 
+             xaxis = list(title = "Corona subsidie")) %>%
+             #legend = list(title = list(text = '<b>Nace Groep</b>'), y =0.97, x= 1.05))
+      config(displayModeBar = FALSE) # Remove Menu bar on top right op plot
+
+  plt_2
+
+# Save as html  
+  # htmlwidgets::saveWidget(plt_2, file="_images/plt_subsidies_requests_per_type.html", selfcontained = TRUE)
+    
+  # title = list(text = "<span style='text-align: left;'>Aantal aanvragen</span>", x = 0.0),
+
+  # For interactivity :
+  # hovertemplate = 'Entity: %NG: %{x}<br>Total: %{y:,.0f}', 
+  # hoverlabel = list(font = list(size = 11, color = ~Subsidy, family = 'Arial', textalign = 'left')),
+  # hoverinfo = 'x+y')  
+  
+  
+```
+
+```{r 05 barchart-request-data}
+#| label: fig-barchart-with-request-data
+#| fig-cap: Bedrag aangevraagde subsidies volgens aantal aanvragen per entiteit per type subsidie
+#| fig-cap-location: top
+#| results: asis
+
+# ______________________________________________________________________________
+# INL-05 barchart request-data
+# KDT 2023-12-25
+# functionality :
+# CREATE BAR CHARTS with request data
+# ______________________________________________________________________________
+ 
+# |3| Create BAR CHARTS >> Entities met x aanvragen: welke premie?
+
+# MASTER DATAFRAME rst_subsidies
+  # Add number of requests per entity >> nRequests
+    rst_sub_exGM <- dta_subsidies
+    rst_sub_exGM <-
+      rst_sub_exGM [!(rst_sub_exGM$Subsidy =="GM1" | rst_sub_exGM$Subsidy =="GM1"),] %>%
+      add_count(EntityNumber, name = "nRequests") 
+  
+  # Count requests per entity >> nCount_entity  
+    rst_entity_ex <- rst_sub_exGM %>% 
+      count(nRequests, name = "nCount_entity") 
+  
+  # Count requests per type >> nCount_type
+    rst_subsidy_exGM <- rst_sub_exGM %>%
+      count(Subsidy, name = "nCount_type")
+  
+  # Clean Up
+    #rm(dta_subsidies)  
+
+
+# Create dataframe without subsidies GM1 & GM2  
+  # rst_subsidies_exGM <- 
+  #   dta_subsidies[!(dta_subsidies$Subsidy =="GM1" | dta_subsidies$Subsidy =="GM1"),]  %>%
+  #    add_count(EntityNumber, name = "nRequests") 
+  #    add_count(Subsidy) %>%
+  #   rename("nRequests" ="n", "nReq_Type" = "nn")
+
+# Make categoricals and sort
+  tmp_vc1_exGM <- tmp_vc1[! tmp_vc1 %in% c('GM1', 'GM2')]  # delete GM1 & 2 from vector
+  rst_sub_exGM$Subsidy <- ordered(rst_sub_exGM$Subsidy, levels=tmp_vc1_exGM)
+  rst_sub_exGM <-rst_sub_exGM  %>%
+    arrange(factor(Subsidy))
+  
+  rst_sub_exGM <- rst_sub_exGM %>%
+    mutate(cRequests = as.character(nRequests))
+  
+# order factors
+  rst_sub_exGM <- rst_sub_exGM %>%
+     arrange(nRequests)
+
+# Create plot
+  plt_3 <- plot_ly(
+    data = rst_sub_exGM,
+    x = ~fct(cRequests),
+    y = ~Amount, 
+    type = 'bar',
+    hoverinfo = 'none',  # Omit hover information
+    color = ~Subsidy,
+    colors = palette.17,
+    opacity = .85) %>%
+    layout(autosize = T, margin = list(l=0, r=25, b=40, t=50, pad=0),
+           yaxis = list(title = "<span>Bedrag ontvangen subsidies <br> </span>", tickformat = ",d"),
+           xaxis = list(title = "Type subsidie"),
+           legend = list(title = list(text = '<b>Subsidie</b>'), y = 0.97, x = 0.97),  
+           barmode = 'stack') %>%  # Set barmode to 'stack' for stacked bars
+    config(displayModeBar = FALSE)  
+
+  plt_3
+  
+# Save as html  
+  # htmlwidgets::saveWidget(plt_3, file="_images/plt_subsidies_requests_stacked-bar-chart.html", selfcontained = TRUE)
+ 
+  # title = list(text = "<span style='text-align: left;'>Ontvangen subsidies per subsidie - Stacked Bar Plot</span>", x = 0.05),
+  
+  # hovertemplate = 'Subsidy: %{x}<br>Total: %{y:,.0f}', 
+  # hoverlabel = list(font = list(size = 11, color = ~Subsidy, family = 'Arial', textalign = 'left')),
+  # hoverinfo = 'x+y')
+
+  
+  
+# Clean up
+ # rm(list = ls(pattern="(^tmp_|^flt_|^chk_|^plt_|^rst)"))
+
+```
+
+```{r INL-06 boxplot global-by-subsidy}
+#| label: fig-boxplot-global-by-subsidy
+#| fig-cap: Boxplot van de toegekende coronasubsidies – per subsidie
+#| fig-cap-location: top
+#| results: asis
+
+# ______________________________________________________________________________
+# INL-06 boxplot global-by-subsidy
+# KDT - 2024-01-065
+# functionality :
+# CREATE boxplots with subsidies 
+# ______________________________________________________________________________
+
+# import raw data and order
+  # tmp_0 <- dta_subsidies
+  rst_subsidies$Subsidy <- ordered(rst_subsidies$Subsidy, levels=tmp_vc1) 
+  rst_subsidies <-rst_subsidies %>%
+    arrange(factor(Subsidy))
+  
+# Create plot
+  plt_1 <- plot_ly(
+    data = rst_subsidies,
+    x = ~Subsidy,
+    y = ~Amount,
+    type = 'box',
+    hoverinfo = 'none',  # Omit hover information
+    color = ~Subsidy,
+    colors = palette.17,
+    opacity = 1) %>%
+    layout(autosize = T, margin = list(l=0, r=25, b=40, t=50, pad=0),
+           yaxis = list(title = "<span>Ontvangen subsidies <br> log-transformed scale log10 <br> </span>",tickformat = ",d", type = "log"),
+           xaxis = list(title = "Type subsidie"),
+           legend = list(title = list(text = '<b>Subsidie</b>'), y =0.97, x= 1)) %>%
+           #plot_bgcolor ='#FAFAFA') 
+           config(displayModeBar = FALSE)
+  plt_1
+  
+# Save as html
+  # htmlwidgets::saveWidget(plt_4, file="_images/plt_global_by_subsidy_boxplot.html", selfcontained = TRUE)
+  
+  # title = list(text = "<span style='text-align: left;'>Ontvangen subsidies per subsidie - Boxplot</span>", x = 0.05),
+  
+  # For interactivity:
+  # hovertemplate = 'Entity: %{text}<br>NG: %{x}<br>Total: %{y:,.0f}', 
+  # hoverlabel = list(font = list(size = 11, color = ~Subsidy, family = 'Arial', textalign = 'left')),
+  # hoverinfo = 'text+x+y')
+  
+# Remove Objects 
+  rm(list = ls(pattern="^plt_"))
+
+```
+

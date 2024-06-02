@@ -1,0 +1,50 @@
+---
+theme: cosmo
+format: html
+editor: source
+number-offset: 0
+execute: 
+  echo: false
+  output: true
+  warning: false
+  error: false
+  freeze: auto
+  cache: true
+---
+
+# De federale inkomensondersteuning
+
+Wat de **federale** premies betreft is de meest in het oog springende steunmaatregel het '*overbruggingsrecht*'.\
+
+In het kader van de ontwikkeling van een *sociaal vangnet voor zelfstandigen in situaties van gedwongen onderbreking of stopzetting*, zijn er sinds 1995 verschillende maatregelen genomen. In 1997 werd de sociale verzekering in geval van faillissement geïntroduceerd als een nieuwe volwaardige tak in het sociaal statuut. In de daaropvolgende jaren is het systeem verbeterd, zowel door een uitbreiding van de geboden bescherming als van het toepassingsgebied. In 2015 is samen met een nieuwe verruiming van het toepassingsgebied besloten om de faillissementsverzekering om te dopen tot '*overbruggingsrecht*'. Deze nieuwe benaming werd beschouwd als meer representatief voor de diverse situaties van stopzetting waarvoor het bescherming biedt.
+
+Het overbruggingsrecht betreft een vergoeding voor ondernemingen die wegens moeilijkheden (brand, faillissement, ... ) gedwongen worden te sluiten. De vergoeding wordt uitbetaald door het sociaal verzekeringsfonds van de zelfstandige. Naar aanleiding van de coronacrisis werden de toekenningsmodaliteiten versoepeld en de bedragen aangepast[^1] . In grote lijnen kan gesteld worden dat wie sociale bijdragen betaalde en zijn onderneming geheel of gedeeltelijk sloot (verplicht of vrijwillig), recht had op het overbruggingsrecht, dat in sommige gevallen, verdubbeld werd.[^2]
+
+[^1]: <https://clarinval.belgium.be/nl/zes-krachtige-steunmaatregelen-voor-zelfstandigen>
+
+[^2]: Hoofdberoep = 'volledige uitkering', bijberoep = 'gedeeltelijke uitkering'\
+    Omvang financiële steun bedraagt vanaf maart 2022 bij een volledige uitkering 3.494,32 EUR met gezinslast en 2.796,34 EUR zonder gezinslast (resp. 1.747,16 EUR en 1.398,17 EUR bij een gedeeltelijke uitkering) wanneer er een onderbreking is van meer dan 15 opeenvolgende kalenderdagen per kalendermaand. Bij een onderbreking van minder dan 15 opeenvolgende kalenderdagen per kalendermaand bedraagt de financiële steun bij een volledige uitkering 1.747.16 EUR met gezinslast en 1.398,17 EUR zonder gezinslast (resp. 873,58 EUR en 699,09 EUR bij een gedeeltelijke uitkering).
+
+Het [**betalen van sociale bijdragen**]{.underline} is echter geen relevant criterium om de nood aan financiële ondersteuning te verrechtvaardigen.
+
+-   Door het bestaan van de 'minimum bijdrage', zal iedere sociale bijdrage betaler de federale subsidie ontvangen ongeacht zijn eventueel extreem lage inkomen. **De RSVZ meldt zelf dat inactieven zich plots regulariseren teneinde coronasteun te genieten**.[^3]
+
+-   Top-inkomens die helemaal geen nood hebben aan steun, ontvangen de subsidie.
+
+-   Maar ook **starters** betalen een 'voorlopige' sociale bijdrage die hen recht geeft op het overbruggingsrecht, **zelfs al is hun economische activiteit marginaal of heeft ze helemaal geen economische finaliteit.**[^4] Zo ontving een starter met een hobby-activiteit, een verwaarloosbare jaaromzet, 0€ investeringen, 0€ vaste kosten en een break-even resultaat, net geen 18.000€ (federale en gewestelijke) subsidies tussen 22/04/2020 en 31/12/2020. In 2022 werd de activiteit reeds stopgezet.
+
+[^3]: <https://rsvzjaarverslag.be/2020/covid-19/de-coronamaatregelen-doorheen-2020/>
+
+[^4]: Wanneer een activiteit opeenvolgende jaren verlieslatend is moet zij beschouwd worden als niet bedoeld om er opbrengsten uit te verkrijgen. Vaak is deze activiteit een (uit de hand gelopen) hobby of een zingevende bezigheid waarvan de kosten 'geprofessionaliseerd' worden. Door de hobby-activiteit als beroepsmatig te kwalificeren krijgen de private hobby-uitgaven het karacter van **beroepskosten** die via de fiscale aftrek gedeeltelijk kunnen gerecupeerd worden door een lagere fiscale aanslag.
+
+Het tweede toekenningscriterium, [**sluiting van de onderneming**]{.underline}, is al even problematisch.
+
+Voor veel horecazaken en sommige kleinhandel, zoals kledingzaken[^5], is de **verplichte** sluiting dramatisch is. Maar dat geldt niet voor alle verplicht gesloten ondernemingen. Een onderneming die tuinmachines verkoopt en onderhoudt rapporteerde weinig omzetverlies door de sluiting: klanten informeerden telefonisch waarna info over de machine werd gemaild en de verkoop werd afgerond. Ook de onderhoudswerkzaamheden gingen gewoon door.
+
+[^5]: Kledingzaken bestellen hun collectie maanden op voorhand. Tijdens de wintermaanden wordt de lentecollectie geleverd en ontstaat de schuld aan leveranciers. Wanneer de voorraad niet verkocht geraakt ingevolge gedwongen sluiting ontstaat een enorm probleem: leveranciers kunnen niet betaald worden, de niet-verkochte voorraad moet worden opgeslagen, nieuwe bestellingen voor het volgende seizoen moeten worden geplaatst in een uiterst onzekere toestand want niemand garandeert dat de pandemie zal voorbij zijn, ...
+
+Verplichte sluiting (lees: verbod op toegang tot de fysieke inrichting) impliceert niet dat elke activiteit verboden is. Dit blijkt duidelijk uit het feit dat horeca-ondernemingen enkel de gelagzaal moeten sluiten om van de premie te genieten, ook al worden er nog afhaaldiensten georganiseerd. Later zullen de criteria aangescherpt worden en zal 'verplichte sluiting' inhouden dat er geen enkel activiteit plaats heeft.
+
+Nog meer vraagtekens kunnen geplaatst worden bij de 'vrijwillige sluiting'. De 'vrijwillige' sluiting geeft ook toegang tot het overbruggingsrecht terwijl dienstverlenende ondernemingen probleemloos - met gesloten deuren - verder werken.
+
+Doordat er enkel geaggregeerde gegevens beschikbaar zijn kan deze subsidiëring niet verder geëvalueerd worden en is zij derhalve geen object van deze studie.

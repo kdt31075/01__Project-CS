@@ -1,0 +1,318 @@
+---
+theme: cosmo
+format: html
+editor: source
+execute :
+  echo: false
+  output: true
+  warning: false
+  error: false
+  freeze: auto
+  cache: true
+code-fold: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# De gewestelijke coronasubsidies
+
+Naast de federale inkomensondersteuning werd er ook door de Gewesten financiële steun toegekend aan ondernemingen, in principe, ter dekking van de vaste kosten.
+
+## Identificatie, voorwaarden, bedragen
+
+De coronasubsidies werden toegekend door Vlaio op basis van Besluiten van de Vlaamse regering. @tbl-overzicht-wetgeving geeft de toekenningsvoorwaarden en de maximale steunbedragen weer.
+
+```{r load packages}
+# clear all 
+ rm(list = ls()) 
+ rm(list = ls(envir = globalenv()))
+
+# Load packages
+pacman::p_load(DBI, RMySQL, tidyverse, rio, here, skimr, lubridate, knitr,
+               scales, grid, tidyr, janitor, officer, flextable, ggplot2,
+               ggrepel, stringr, patchwork, plotly)
+
+options(plotly.renderer = "plotly_mimetype+quarto")
+```
+
+```{r color palettes}
+# color palettes
+  blue.6 <-  c("#9BBBFE", "#8DAFFC", "#7FA2F9", "#7192F2", "#6383EA", "#5C7BE4")
+  palette.17 <- c("#BB4D7A", "#FDAF8A", "#FFD1B5", blue.6,
+                "#B5B0F2", "#ABA7E6", "#9E9BD9", "#8D8BC2", "#807EB0", "#7977A6",
+                "#A4C2A9", "#91AB95")
+  palette.15 <- c("#BB4D7A", "#FDAF8A", "#FFD1B5", blue.6,
+                "#B5B0F2", "#ABA7E6", "#9E9BD9", "#8D8BC2", "#807EB0", "#7977A6")
+```
+
+```{r 01 tbl-overzicht-wetgeving}
+#| label: tbl-overzicht-wetgeving
+#| tbl-cap: Overzicht coronasubsidies – afkorting, naam, voorwaarden en bedragen
+#| tbl-cap-location: top
+
+# ______________________________________________________________________________
+# INL-01 tbl-overzicht-wetgeving
+# kdt 2023-12-01
+# Functionality : 
+# DATA LOAD for tbl-overzicht-wetgeving  <<  dta-overzicht-wetgeving  
+# ______________________________________________________________________________
+
+# Import raw data 
+  dta_premies.overzicht <- import(here("Data", "Processed Data", "Overzicht premies.csv"))
+
+# Create flextable
+  big_border = fp_border(color="grey", width = 2)
+  std_border = fp_border(color="grey85", width = 1)
+  
+  set_flextable_defaults(
+    font.family = "Calibri", font.size = 10, theme_fun = theme_vanilla,
+    big.mark = " ", border.color = "#c2c2c2")
+
+  ft <- flextable(dta_premies.overzicht)
+  
+  ft <- align(ft, align = "left", part = "all")
+  
+  ft <- width(ft, j = 1, width = 0.7, unit = "cm" )
+  ft <- width(ft, j = 2, width = 2.5 , unit = "cm")
+  ft <- width(ft, j = 3, width = 5.5 , unit = "cm")
+  ft <- width(ft, j = 4:5, width = 2.0 , unit = "cm")
+  ft <- width(ft, j = 6, width = 5.5 , unit = "cm")  # 5.5
+  ft <- width(ft, j = 7, width = 5.5 , unit = "cm")  # 5.5
+   
+  ft <- height_all(ft, height = .25, unit = "cm")
+  ft <- padding(ft, padding = 1.5, part = "all")
+  ft <- padding(ft, j=1, padding.left = 4, part = "all")
+  ft <- padding(ft, j=7, padding.right = 4, part = "all")
+  
+  ft <- border_inner_v(ft, border = std_border )
+  ft <- border_outer(ft, part="all", border = big_border )
+  ft <- bg(ft, bg = "grey90", part = "header")
+  
+  set_table_properties(
+    x = ft,
+    layout = "fixed",
+    align = "center",
+    opts_html = list(
+      scroll = list(
+        height = "750px", freeze_first_column = TRUE))
+  )
+  
+```
+
+```{r 02A data-subsidies-skimmed}
+
+# ______________________________________________________________________________
+# 02A data-subsidies-skimmed
+# KDT - 2023-12-15
+# Functionality : 
+# SKIMMING for tbl-subsidies-skimmed   <<  dta_subsidies  
+# ______________________________________________________________________________
+
+# Clear all the values, not the loaded libraries
+  # rm(list = ls(envir = globalenv()))
+
+# [1] -- import and data wrangling ---
+  
+# import
+  dta_subsidies <- import(here("Data", "Processed Data", "subsidies.rds"))
+  tmp_subsidies <- dta_subsidies  # dta_subsidies wordt gebruikt in volgend script
+  
+# Bereken aantal steuntrekkende entiteiten
+  rst_entities.total <- length(unique(tmp_subsidies$EntityNumber))   
+  
+# Totaal bedrag aan subsidies
+  tmp_amount.sum <- summarise(tmp_subsidies, amount.sum = sum(Amount, na.rm = TRUE))
+  
+# Calc Total subsidy per Type (type subsidie)
+  tmp_subsidies.total_per_type <- tmp_subsidies %>%
+    group_by(Subsidy) %>%
+    summarise(Amount = sum(Amount, na.rm = TRUE))
+
+# dataframe aanmaken met naam premies en volgnummer voor ordening
+  tmp_vc1 <- c("CHP", "CCP", "COP", "V01", "V02", "V03", "V04", "V05",
+              "V06", "V07", "V08", "V09", "V10", "V11", "V12", "GM1", "GM2")
+  tmp_vc2 <- seq(1, 17)
+  
+# Skim per type subsidy
+  tmp_subsidies.skim_per_type <- tmp_subsidies %>%
+    group_by(Subsidy) %>%
+    skim_without_charts(Amount)
+  
+  # skim_per_Type <- skim_per_Type %>%
+  #   mutate(across(where(is.numeric), round, 0))
+  
+# Modify header
+  tmp_subsidies.skim_per_type <- tmp_subsidies.skim_per_type[,c(3,6,7,9,10,11,12)]
+  tmp_header.new <- c("Subsidy", "Mean", "SD", "p25", "p50", "p75", "p100")
+  colnames(tmp_subsidies.skim_per_type) <- tmp_header.new
+
+# Merging
+  tmp_join1 <- left_join(tmp_subsidies.skim_per_type,tmp_subsidies.total_per_type,
+                         join_by(Subsidy == Subsidy))
+  
+# Volgorde van de x-waarden in ggplot vastleggen >> factors 
+  tmp_join1$Subsidy = ordered(tmp_join1$Subsidy, levels=tmp_vc1)  # Make categoricals ---
+  tmp_join1 <- tmp_join1 %>%                                      # --- and sort
+    arrange(factor(Subsidy))
+  
+# Kolom 'Aantal ondernemingen toevoegen'
+  tmp_join2 <- tmp_join1 %>%
+    mutate(Requests = Amount / Mean) %>%
+    mutate(across(where(is.numeric), round, 0)) %>%
+    select(Subsidy, Requests, Amount, Mean, SD, p25, p50, p75, p100)
+
+# Calculate the sum for the third column
+  rst_amount.total <- sum(tmp_join2$Amount, na.rm = TRUE)
+  rst_requests.total <- sum(tmp_join2$Requests, na.rm = TRUE)
+  form_amount.total <- format(rst_amount.total, big.mark = " ", scientific = FALSE)
+  form_requests.total <- format(rst_requests.total, big.mark = " ", scientific = FALSE)
+  form_entities.total <- format(rst_entities.total, big.mark = " ", scientific = FALSE)
+  
+  chk_1 <- tmp_amount.sum - rst_amount.total  # consistenty check - should be 0
+  if (chk_1 != 0) {
+     stop ("Processing stopped because chk_1 is not equal to 0.")  # Stop processing
+     } else {
+     rm(tmp_amount.sum)  
+     }
+
+  
+# Create a total row
+  tmp_totalrow <- data.frame(
+    Subsidy = "Total",
+    Requests = rst_requests.total,
+    Amount = rst_amount.total,
+    Mean = "-",
+    SD = "-",
+    p25 = "-",
+    p50 = "-",
+    p75 = "-",
+    p100 = "-"
+  )
+
+# Add the total row to the original dataframe
+  rst_subsidies.skimmed <- rbind(tmp_join2, tmp_totalrow) %>%
+    mutate_at(c('Mean', 'SD', 'p25', 'p50', 'p75', 'p100'), as.numeric)
+  
+# Cleanup
+  #rm(list = ls(pattern="tmp_"))
+```
+
+## Numerieke samenvatting
+
+Er werden `r form_requests.total` corona-subsidies aangevraagd door `r form_entities.total` entiteiten met rechtspersoonlijkheid (vennootschappen en verenigingen) voor een totaal bedrag van `r form_amount.total`€.
+
+@tbl-subsidies-skimmed vat de belangrijkste kengetallen samen voor de verschillende subsidies.
+
+```{r 02B tbl-subsidies-skimmed}
+#| label: tbl-subsidies-skimmed
+#| tbl-cap: Toegekende coronasubsidies – kwartielen
+#| tbl-cap-location: top  
+
+# [2] -- Create Flextable tbl-subsidies.skimmed ---
+
+  set_flextable_defaults(
+    align = left, font.family = "Calibri", font.size = 10.5, theme_fun = theme_vanilla,
+    padding = 0, big.mark = " ", border.color = "#c2c2c2")
+  
+  big_border = fp_border(color="grey", width = 2)
+  std_border = fp_border(color="grey85", width = 1) 
+   
+  ft <- flextable(rst_subsidies.skimmed)
+  ft <- footnote(ft, i = 1, j = 1:6,
+                 value = as_paragraph(
+                   c(" Referentie van de subsidie",
+                     " Aantal aanvragen voor subsidie",
+                     " Totale bedrag toegekend voor deze subsidie",
+                     " Gemiddelde bedrag van de subsidie",
+                     " Standaarddeviatie van de subsidie",
+                     " Percentielen: p25, p50, p75 en p100")
+                      ),
+                   ref_symbols = c("1", "2", "3", "4", "5", "6"),
+                   part = "header")
+  
+  ft <- valign(ft, valign = "bottom", part = "header")
+  ft <- align(ft, align = "right", part = "all")
+  ft <- align(ft, j = 1:1, align = "left", part = "all")
+  ft <- height_all(ft, height = .25, unit = "cm")
+  ft <- hrule(ft, rule = "exact")
+  
+  ft <- align(ft, align = "left", part = "footer")
+  ft <- fontsize(ft, size = 10, part = "footer")
+  ft <- padding(ft, padding = 1.5, part = "all")
+  ft <- padding(ft, j = 1, padding.left = 5, part = "all")
+  ft <- padding(ft, j = 9, padding.right = 5, part = "all")
+  ft <- width(ft, j = 1:2 , width = 1.8, unit = "cm" )
+  ft <- width(ft, j = 3 , width = 3, unit = "cm" )
+  ft <- width(ft, j = 4:9 , width = 2.15, unit = "cm" )
+  
+  ft <- bg(ft, bg = "grey90", part = "header")
+  ft <- border_outer(ft, part="header", border = big_border )
+  ft <- border_outer(ft, part="body", border = big_border )
+  set_table_properties(ft, layout = "fixed", align = "center", width = 1.00) 
+
+```
+
+::: {.callout-note collapse="true" appearance="simple"}
+## Toelichting bij de cijfers van @tbl-subsidies-skimmed
+
+\[Lijn 1\] De steun die werd toegekend met de Corona HinderPremie (CHP) bedroeg 672.329.380€ in totaliteit. Deze steun werd toegekend aan 59.028 entiteiten. Het gemiddelde bedrag van de CHP bedroeg 11.390€, met een standaarddeviatie (een gemiddelde afwijking van het gemiddelde) van 5.503€.
+
+25% (p25) van de steuntrekkers ontving een bedrag kleiner of gelijk aan 8.800€ CHP.\
+50% (p50) ontving een bedrag kleiner of gelijk aan 9.760€. Dit bedrag is tevens de mediaanwaarde.\
+75% (p75) ontving 12.640€ CHP of minder.\
+De entiteiten in het hoogste kwartiel, de 25% top-steuntrekkers, ontvingen bedragen gaande van 12.641€ tot 123.680€. Anders gesteld, 100% (p100) ontving 123.680€ of minder aan CHP. Dit laatste bedrag is meteen ook het hoogste toegekende bedrag aan Hinderpremie. Of: minstens 1 entiteit ontving 123.680€ Hinderpremie.
+
+\[Lijn 1\] Het totaal bedrag van alle subsidies samen bedraagt gemiddeld 16.660€ met een standaardedeviatie van 38.068€. De mediaanwaarde ligt op 8.800€. De uitschieters aan de rechterzijde van de verdeling (de paar entiteiten met een bijzonder hoge subsidie) trekken het gemiddelde naar boven waardoor het gemiddelde bijna dubbel zo hoog wordt als de mediaan.
+
+\[Lijn 16\] Bij de subsidie 'GM1 - Globalisatie Mechanisme 1' ontvangt één onderneming een subsidie van 2.000.000€ (p100). Het feit dat het gemiddelde (134.711€) 3,8 keer hoger ligt dan de mediaan (35.466€) wijst op extreme uitschieters.
+:::
+
+Dit is een testlijn die niets voorstelt en later moet verwijderd worden en vervangen door een echte tekst die iets te betekenen heeft en nietdoor nonsense. Dit is een testlijn die niets voorstelt en later moet verwijderd worden en vervangen door een echte tekst die iets te betekenen heeft en nietdoor nonsense.
+
+Dit is een testlijn die niets voorstelt en later moet verwijderd worden en vervangen door een echte tekst die iets te betekenen heeft en nietdoor nonsense.
+
+::: column-body-outset-right
+![Aantal aanvragen per entiteit](_images/plt_1.png){#fig-requests_per_entity width="100%"}
+:::
+
+
+@fig-requests_per_entity geeft het aantal aangevraagde subsidies per entiteit. Een zesenvijftigduizend (56.540) entiteiten vroegen 1 en slechts 1 enkele subsidie aan. En dan gaat het sterk bergaf. Twee subsidies werden aangevraagd door 26.380 entiteiten. En 20.511 entiteiten vroegen 3 subsidies aan. 55.539 ondernemingen vroegen 9 premies aan.
+
+@fig-requests_per_type geeft het aantal aanvragen per type subsidie. De Corona Hinderpremie (CHP) had duidelijk veel succes. Wanneer beide figuren samen bekeken worden, dan wordt de suggestie gewekt dat de CHP misschien al te gemakkelijk kon verkregen worden?
+
+::: column-body-outset-right
+![Aantal aanvragen per subsidie](_images/plt_2.png){#fig-requests_per_type width="100%"}
+:::
+
+
+
+De Corona Hinderpremie kende veel succes omdat de toekenningsvoorwaarden heel beperkt waren.
+
+Om deze premie te verkrijgen moest immers geen omzetdaling aangetoond worden. Verplichte sluiting of vrijwillige sluiting 'veiligheidshalve' (de activiteiten minstens zeven opeenvolgende dagen onderbreken), wat enkel betekent dat de onderneming niet toegankelijk mag zijn voor publiek en wat niet betekent dat er geen activiteit mag plaatsvinden, was een té ruim criterium waardoor zesenvijftigduizend ondernemingen de CHP hebben ontvangen, vaak economisch onterecht. Zij hadden geen of weinig hinder van de lock down.
+
+
+![Aantal aanvragen per entiteit per subsidie](_images/plt_3.png){#fig-barchart-with-request-data}
+
+
+Niet alleen dienstverleners maar ook handelsondernemingen werkten verder met gesloten deuren. De klanten werden telefonisch of via email en internet verder geholpen.
+
+De Corona Compensatie Premie kent ook nog veel bijval met 43.297 aanvragen.
+
+Nu is er wel sprake van een omzetdaling maar daar is een mouw aan te passen door de facturatie uit te stellen naar een latere periode. Uitstellen kan men een bepaalde tijd maar men kan niet blijven uitstellen. Eens moeten die facturen toch worden gemaakt. Maar tegen dan is de buit binnen. De premie is verworven. Voor sommige sectoren lukt de uitsteltruc niet. Begrafenisondernemers kunnen een overlijden niet onder de mat vegen. Officiële documenten maken deel uit van het dossier. Overlijdensattest van arts of ziekenhuis, aangifte bij de Dienst Burgerlijke Stand van de gemeente, overlijdensakte, ... Zij zijn wel verplicht tijdig[^1] te factureren. En zij komen zelden voor in de coronapremie statistieken niettegenstaande er ook bij hen sprake is van een omzetdaling omdat het aantal aanwezigen op een begrafenis beperkt wordt.
+
+[^1]: Tijdig betekent conform Wetboek BTW. In principe uiterlijk de 15de dag van de maand volgend op de maand waarin het belastbare feit van de handeling heeft plaatsgevonden.
+
+De hypothese dat de toekenningsvoorwaarden voor CHP en CCP té ruim waren en/of voldoende (dreiging met) controle wordt ondersteund door de cijfers in @fig-barchart-with-request-data. Van de 56.540 entiteiten die slecht 1 premie hebben aangevraagd heeft 46,52% of 26.304 ondernemingen de CHP aangevraagd. 49,94% van die groep heeft de CCP aangevraagd. Hier vinden we heel veel vrije beroepers: artsen, notarissen, ... Beroepsgroepen die bezwaarlijk in de financiële problemen komen door de pandemie. Voor de meesten zal de premie beperkt zijn tot 3.000€ maar als zij meerdere vestigingen hebben, kan dit oplopen tot 3.000€ x 5 (vestigingen) Cfr. infra case: de neurologen.
+
+
+De cijfers van @tbl-subsidies-skimmed laten een sterke rechts scheve verdeling zien. Veel ondernemingen ontvangen een (relatief) klein bedrag terwijl een beperkt aantal ondernemingen een groot bedrag aan subsidie opstrijkt.
+
+De rechts positieve scheefheid wordt ook duidelijk geillustreerd in @fig-boxplot-global-by-subsidy. (let op de logaritmische schaal voor de y-as) Voor GM1 bevindt het gemiddelde zich zelf buiten de box van het interkwartielbereik! Die negen uitschieters met subsidies \>= 1 miljoen euro zullen nader bekeken worden.
+
+Ingevolge de asymmetrie (rechtse scheefheid) wordt het gemiddelde als centrummaat terzijde geschoven en wordt voorkeur gegeven aan de mediaan.
+
+
+![Spreiding van de toegekende subsidies](_images/plt_5.png){#fig-boxplot-global-by-subsidy}
+
+
+Verder in de studie wordt onderzocht wie de outliers of bovengemiddelde steuntrekkers zijn en de financiële relevantie van de toegekende steun.

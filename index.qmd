@@ -1,0 +1,73 @@
+---
+author:
+  - name: Karel Detremerie
+    email: karel.dt@telenet.be
+    corresponding: true
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+
+execute:
+  cache: true
+  echo: false
+  output: true
+  warning: false
+  error: false
+  freeze: auto
+
+editor: source
+cls: chicago-fullnote-bibliography-no-em-dash.csl
+website:
+  favicon: cover.png
+  twitter-card: true
+  site-url: https://github.com/kdt31075/81__Book-CS/index.qmd      
+---
+
+# Voorwoord {.unnumbered}
+
+```{r}
+
+# clear all 
+ rm(list = ls()) 
+ rm(list = ls(envir = globalenv()))
+
+# Load packages
+pacman::p_load(DBI, RMySQL, tidyverse, rio, here, skimr, lubridate, knitr,
+               scales, cowplot, grid, magick, tidyr, janitor, officer,
+               flextable, ggplot2, ggrepel, stringr, patchwork,
+               plotly, DT, RColorBrewer, xml2, downlit)
+```
+
+Het nut van subsidies is een controversieel onderwerp. Strikt genomen horen subsidies niet thuis in een vrije markteconomie. Toch zijn er soms situaties, economisch en politieke, waarin het toekennen van subsidies zinvol kan zijn.
+
+Voorstanders argumenteren dat subsidies soms nodig zijn voor de uitbouw of het overleven van bepaalde sectoren en de daarbijhorende jobcreatie.
+
+Tegenstanders vinden dat de vrije markt wel zal bepalen welke ondernemen of sectoren overleven. Het is niet aan de overheid om met belastinggeld niet-levensvatbare ondernemingen overeind te houden. De subsidies zouden de markt verstoren en leiden tot een niet-efficiënt resultaat.
+
+Ze suggereren dat overheidsuitgaven aan subsidies nooit zo effectief zijn als de overheid beweert. De kosten en onbedoelde gevolgen van het toepassen van subsidies zijn zelden de moeite waard, beweren zij.
+
+Een ander probleem, zo wijzen tegenstanders erop, is dat het subsidiëren helpt het politieke proces te corrumperen. Volgens politieke theorieën over "regulatory capture" (innige banden tussen toezichthouders en sector) en "rent-seeking" (een economisch concept dat duidt op een entiteit die probeert rijkdom te vergaren zonder een bijdrage te leveren aan de productiviteit - vb lobbying, donaties, ...) bestaan subsidies als onderdeel van een onzalig verbond tussen grote bedrijven en de staat. Bedrijven wenden zich vaak tot de overheid om zich te beschermen tegen concurrentie. In ruil daarvoor doneren bedrijven aan politici of beloven ze hen voordelen na hun politieke carrières, vaak via een zitje in hun bestuursorgaan.[^1]
+
+[^1]: In België werden gfiten door bedrijven wettelijk beperkt naar aanleiding van het Agusta-schandaal. Donaties aan de politieke partijen kwamen in de plaats. Wel kunnen privé-personen nog giften doen maar die zijn beperkt tot 2.000€ per jaar. Aanleiding voor de regelgeving waren incidenten met Geert Versnick. <https://www.vrt.be/vrtnws/nl/2018/02/21/sponsoring-politieke-partijen-ingeperkt--maar-niet-helemaal-stop/>
+
+Zelfs als een subsidie met goede bedoelingen wordt gecreëerd, zonder enige collusie of eigenbelang, verhoogt het de winsten van degenen die gunstige behandeling ontvangen, waardoor een prikkel ontstaat om te lobbyen voor de voortzetting ervan, zelfs nadat de noodzaak of het nut ervan is verlopen. Dit stelt mogelijk politieke en zakelijke belangen in staat om wederzijds voordeel te creëren ten koste van belastingbetalers en/of concurrerende bedrijven of industrieën.
+
+Gezien subsidies een bediscussieerbare allocatie van schaarse overheidsmiddelen zijn, is het gerechtvaardigd om vragen te stellen over zowel de effectiviteit als de efficiëntie van deze uitgaven.\
+\
+De coronasubsidies, toegekend door het Vlaamse Gewest naar aanleiding van de verplichte sluiting van ondernemingen tijdens de Covid-19 pandemie, hebben aanzienlijke financiële gevolgen gehad voor de begroting. België koos niet voor een kostenbesparende aanpak zoals in andere Europese landen. Subsidies in plaats van leningen, té ruime toekenningsvoorwaarden en té gulle bedragen hebben geleid tot ontsporingen in het overheidsbudget. Niettegenstaande de - volgens onze hypothese - ondoeltreffendheid, blijven Vlaamse politici hun beleid verdedigen.
+
+Vooreerst identificeren we de 17 verschillende subsidies. Naast hun juridische grondslag bieden we een numeriek inzicht. Doorheen het werk stellen we vragen met betrekking tot
+
+-   de efficiëntie van de toegekende subsidie
+-   de vermeende fraude en in sommige gevallen de onbetwistbare fraude
+-   het gebrek aan toezicht
+-   de quasi onvoorwaardelijke toegankelijkheid tot het subsidiesysteem
+
+Met een aantal casestudies illustreren we onze stelling.
+
+Verder belichten we diverse opmerkelijke regelingen (bv. subsidie aan starters) aan de hand van sprekende voorbeelden.
+
+De betrokken steuntrekkende entiteiten worden met naam en toenaam genoemd. Niet om de betrokkenen aan de schandpaal te nagelen - hun subsidieaanvragen waren meestal conform de wetgeving - wel om de studie reproduceerbaar en falsifieerbaar te maken. We willen betrouwbare en valide gegevens verzamelen die kunnen worden geanalyseerd en geïnterpreteerd om antwoorden te vinden op de onderzoeksvraag.
+
+De lezer wordt uitgenodigd het werk met kritische commentaar te voorzien. Daarom wordt de studie beheerd in een Github repository.

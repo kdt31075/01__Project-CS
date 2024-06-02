@@ -1,0 +1,15 @@
+---
+theme: cosmo
+format: html
+editor: source
+number-offset: 0
+execute: 
+  echo: false
+  output: true
+  warning: false
+  error: false
+  freeze: auto
+  cache: true
+---
+
+# De neurologen

@@ -1,0 +1,498 @@
+---
+theme: cosmo
+format: html
+editor: source
+code-fold: true
+number-offset: 0
+execute: 
+  output: true
+  cache: true
+  echo: false
+  warning: false
+  error: false
+  freeze: auto
+---
+
+# De steuntrekkende entiteiten
+
+```{r}
+
+# clear all 
+# rm(list = ls()) 
+# rm(list = ls(envir = globalenv()))
+ 
+# Load packages
+pacman::p_load(DBI, RMySQL, tidyverse, rio, here, skimr, lubridate, knitr,
+               scales, cowplot, grid, magick, tidyr, janitor, officer,
+               flextable, ggplot2, ggrepel, stringr, patchwork,
+               plotly, DT, RColorBrewer, xml2, downlit)
+```
+
+```{r}
+# color palettes
+  blue.6 <-  c("#9BBBFE", "#8DAFFC", "#7FA2F9", "#7192F2", "#6383EA", "#5C7BE4")
+  palette.17 <- c("#91AB95", "#FDAF8A", "#FFD1B5", blue.6,
+                "#B5B0F2", "#ABA7E6", "#9E9BD9", "#8D8BC2", "#807EB0", "#7977A6",
+                "#BB4D7A", "#B8435A")
+  palette.15 <- c("#91AB95", "#FDAF8A", "#FFD1B5", blue.6,
+                "#B5B0F2", "#ABA7E6", "#9E9BD9", "#8D8BC2", "#807EB0", "#7977A6")
+```
+
+
+
+## Entiteiten naar rechtsvorm
+
+Subsidies konden niet alleen door ondernemingen worden aangevraagd. Andere rechtspersonen kwamen ook in aanmerking: VZW's, beroepsverenigingen, parochiale werken, sportclubs, ...
+
+@tbl-rechtsvorm bevat het aantal entiteiten opgenomen in de KBO, voor het Vlaamse Gewest, ingedeeld op basis van de juridische vorm, die tevens voorkomen in de Vlaio bestanden met subsidies. Kolom 3 geeft het aantal entiteiten ingeschreven in de KBO, kolom 4 geeft het aantal van die entiteiten dewelke subsidie ontving. De laatste kolom geeft de proportie.
+
+```{r INL-07 tbl-rechtsvorm}
+#| label: tbl-rechtsvorm
+#| tbl-cap: "Steuntrekkende entiteiten - Juridische vorm – samenvatting"
+#| tbl-cap-location: top
+
+# ______________________________________________________________________________
+# INL-07 tbl-rechtsvorm
+# kdt 2024-01-06
+# functionality :
+# table rechtsvorm 
+# ______________________________________________________________________________
+
+# Load data
+  my_path = here("Data", "Processed Data", "inl_flextabel_1.rds")
+  flt_1 <- readRDS(my_path)
+  flt_1 <- flt_1 %>%
+     arrange(Description)
+
+  flt_1$Code <- sprintf(paste0("%0", 3, "d"), as.numeric(flt_1$Code))
+  flt_1$Code <- as.character(flt_1$Code)
+
+# Calc proportion
+  prop <-  round(sum(flt_1$VLAIO) / sum(flt_1$KBO), digits = 4)
+  prop <- sprintf("%.1f%%", prop * 100)
+
+  tmp_sum <- c("Totaal "," ",KBO = as.numeric(sum(flt_1$KBO)), VLAIO = as.numeric(sum(flt_1$VLAIO)), prop)
+
+  flt_1 <- rbind(flt_1, tmp_sum)
+
+  flt_1$KBO <- as.numeric(flt_1$KBO)
+  flt_1$VLAIO <- as.numeric(flt_1$VLAIO)
+
+  set_flextable_defaults(
+    font.family = "Calibri", font.size = 10.5, theme_fun = theme_vanilla,
+     big.mark = " ", border.color = "#c2c2c2")
+
+  big_border = fp_border(color="grey", width = 2)
+
+# Paste into Flextable  
+  ft <- flextable(flt_1)
+  ft <- valign(ft, valign = "bottom", part = "header")
+
+  ft <- align(ft, align = "right", part = "all")
+  ft <- align(ft, j = 1:2, align = "left", part = "all")
+  ft <- height_all(ft, height = .25, unit = "cm")
+  ft <- padding(ft, padding = 1.5, part = "all")
+  ft <- padding(ft, j=1, padding.left = 4, part = "all")
+  ft <- padding(ft, j=5, padding.right = 4, part = "all")
+  ft <- hrule(ft, rule = "exact")
+  ft <- width(ft, j = 1, width = 1.5, unit = "cm" )
+  ft <- width(ft, j = 2, width = 11.1, unit = "cm" )
+  ft <- width(ft, j = 3:5, width = 2.2, unit = "cm" )
+  ft <- border_outer(ft, part="all", border = big_border )
+  ft <- bg(ft, bg = "grey90", part = "header")
+  set_table_properties(ft, layout = "fixed", align ="center") 
+  
+```
+
+\
+Wanneer we de cijfers van de KBO als aanknopingspunt nemen, dan betekent dit dat `r prop` van de rechtspersonen subsidie ontving.
+
+Subsidies werden ook toegekend aan entiteiten met eerder zeldzame rechtsvormen. We operationaliseren 'eerder zeldzaam' of 'specifiek' als een rechtsvorm die maximaal 5 keer voorkomt in de Vlaio bestanden. Zie @tbl-uitzonderlijke-vennootschapsvorm.
+
+```{r INL-08 tbl uitzonderlijke-vennootschapsvorm}
+#| label: tbl-uitzonderlijke-vennootschapsvorm
+#| tbl-cap: "Steuntrekkende entiteiten met uitzonderlijke vennootschapsvorm"
+#| tbl-cap-location: top
+
+# ______________________________________________________________________________
+# INL-08 tbl uitzonderlijke-vennootschapsvorm
+# KDT 2024-01-09
+# functionality :
+# table uitzonderlijke vennootschapsvormen
+# ______________________________________________________________________________
+
+# Function definition : Custom function to truncate and append '...'
+  truncate_EntityName <- function(EntityName, max_chars = my_max_chars) {
+    # Check for NA values
+    if (any(is.na(EntityName))) {
+      return(EntityName)  # Return NA values as is
+  }
+  
+# Truncate and append '...' if needed
+  truncated_EntityName <- ifelse(nchar(EntityName) > max_chars,
+                                   paste0(substr(EntityName, 1, max_chars), " ..."),
+                                   EntityName)
+  return(truncated_EntityName)
+  }
+
+# Load data
+  my_path = here("Data", "Processed Data", "inl_flextabel_2.rds")
+  flt_2 <- readRDS(my_path)
+  flt_2 <- flt_2 %>%
+     arrange(Description)
+
+# Apply the custom function to the 'EntityName' column
+  my_max_chars = 45
+  flt_2 <- flt_2 %>%
+  mutate(EntityName = sapply(EntityName, truncate_EntityName))
+
+  flt_2$Code <- sprintf(paste0("%0", 3, "d"), as.numeric(flt_2$Code))
+  flt_2$Code <- as.character(flt_2$Code)
+
+  set_flextable_defaults(
+    font.family = "Calibri", font.size = 10.5, theme_fun = theme_vanilla,
+    padding =0, big.mark = " ", border.color = "#c2c2c2")
+
+  big_border = fp_border(color="grey", width = 2)
+  ft <-  flextable(flt_2)
+  ft <- valign(ft, valign = "bottom", part = "header")
+  ft <- align(ft, align = "right", part = "all")
+  ft <- align(ft, j = 1:4, align = "left", part = "all")
+  ft <- align(ft, j = 3, align = "center", part = "all")
+  ft <- height_all(ft, height = .25, unit = "cm")
+  ft <- padding(ft, padding = 1.5, part = "all")
+  ft <- padding(ft, j=1, padding.left = 4, part = "all")
+  ft <- padding(ft, j=5, padding.right = 4, part = "all")
+  
+  ft <- width(ft, j = 1 , width = 1.1, unit = "cm" )
+  ft <- width(ft, j = 2 , width = 9, unit = "cm" )
+  ft <- width(ft, j = 3 , width = 3, unit = "cm" )
+  ft <- width(ft, j = 4 , width = 4.1, unit = "cm" )
+  ft <- width(ft, j = 5 , width = 2, unit = "cm" )
+  
+  ft <- border_outer(ft, part="all", border = big_border )
+  ft <- bg(ft, bg = "grey90", part = "header")
+   set_table_properties(ft, layout = "fixed", align ="center") 
+
+```
+
+## Entiteiten naar economische activiteit
+
+In zo wat alle economische sectoren werden subsidies aangevraagd. @tbl-summary-NC-Level2  geeft een overzicht van het aantal entiteiten, het totaal bedrag, het hoogste uitgekeerde bedrag, het gemiddelde en de standaard deviatie van de uitgekeerde bedragen, gegroepeerd per sector (nace afdeling). De tabel werd gesorteerd op het gemiddelde uitgekeerde bedrag.
+
+Wie de actualiteit gevolgd heeft merkt op dat lobbywerk geloond heeft!
+
+```{r INL-09 tbl-summary-NC-Level2_A}
+# ______________________________________________________________________________
+# INL-09 summary-NC-Level2_A
+# KDT - 2024-01-09
+# functionality :
+# CREATE flextable Subsidies per nace afdeling (level 2) 
+# ______________________________________________________________________________
+
+# Clear all the values, not the loaded libraries
+# rm(list = ls(envir = globalenv()))
+  #rm(list = ls(pattern="^tmp_|^rst_|^dta_|^plt_|^flt_|^chk_|ft")) 
+
+# Function definition : Custom function to truncate and append '...'
+  truncate_label <- function(Label, max_chars = my_max_chars) {
+    # Check for NA values
+    if (any(is.na(Label))) {
+      return(Label)  # Return NA values as is
+    }
+
+    # Truncate and append '...' if needed
+    truncated_label <- ifelse(nchar(Label) > max_chars,
+                                     paste0(substr(Label, 1, max_chars), " ..."),
+                                     Label)
+    return(truncated_label)
+    }
+
+
+# import raw data ----
+  tmp_1 <- import(here("Data", "Processed Data", "s_join_EnDeAdAcSu.rds"))
+  tmp_1x <- tmp_1 %>%
+             select(-c(3:19))
+  tmp_1y <- tmp_1x %>%
+             select(-c(8:19,21))
+  tmp_1 <-  tmp_1y
+  rm(tmp_1x, tmp_1y)
+  
+  tmp_2 <- import(here("Data", "Raw Data", "nacebel_2008.csv")) %>%
+    rename(Label = Label_NL)
+
+# NG = Nacegroup 
+  tmp_x <- merge(tmp_1, tmp_2, by.x='NaceCode', by.y='Code', all.x = TRUE) %>%
+             select(-Level, -"Parent code", -Label) %>%
+             mutate(NG1 = substring(NaceCode,1,1), NG2 = substring(NaceCode,1,2))
+
+# NG mutate from "1" to "01" etc.
+  tmp_x <- tmp_x %>%
+    mutate(NG1x = case_when(
+      NG1 == "0" ~ "00",
+      NG1 == "1" ~ "01",
+      NG1 == "2" ~ "02",
+      NG1 == "3" ~ "03",
+      NG1 == "4" ~ "04",
+      NG1 == "5" ~ "05",
+      NG1 == "6" ~ "06",
+      NG1 == "7" ~ "07",
+      NG1 == "8" ~ "08",
+      NG1 == "9" ~ "09",
+      TRUE ~ NG1)  # default case, returns the original value if not matched
+    )
+# Depreciated
+# Change column header for field 'Label" >> 'Label.L5'
+  # colnames(tmp_1)[which(names(tmp_1) == "Label")] <- "Label.L5"
+      
+# Create lookup file to find parent code
+  
+  my_max_chars = 160
+  tmp_L1 <- tmp_2 %>% 
+    filter(Level == 1) %>%
+    # select(-Level) %>%
+    mutate(
+      NaceGroup_L1 = paste(Code, substr(Label,1, my_max_chars), sep = " - ")) #%>%
+    # Label = truncate_label(Label) # %>%
+    #select(-"Parent code")
+
+  tmp_L2 <- tmp_2 %>% 
+    filter(Level == 2) %>%
+    # select(-Level)%>%
+    mutate(
+      NaceGroup_L2 = paste(Code, substr(Label,1, my_max_chars), sep = " - ")) #%>%
+     # Label = truncate_label(Label)) %>%
+     # select(-Label) 
+  
+  # Add 'Label' & 'Parent code' Level 2
+  tmp_3 <- merge(tmp_x, tmp_L2, by.x = "NG2", by.y = "Code", all.x = TRUE) 
+  colnames(tmp_3)[which(names(tmp_3) == "Parent code")] <- "PC"
+  
+  # Add Label Level 1
+  tmp_3 <- merge(tmp_3, tmp_L1, by.x = "PC", by.y = "Code", all.x = TRUE) 
+  
+  
+# Rearrange columns    
+  
+  tmp_3 <- tmp_3 %>%
+    select(-Level.x, -Label.x, -Level.y, -Label.y)          
+  
+  tmp_3 <- tmp_3 %>% 
+             select(-PC, everything(), PC) %>%
+             select(-NG1, everything(), NG1) %>%
+             select(-NG1x, everything(), NG1x) %>%
+             select(-NG2, everything(), NG2) %>%
+             select(-NaceGroup_L1, everything(), NaceGroup_L1) %>%
+             select(-NaceGroup_L2, everything(), NaceGroup_L2)
+
+  
+  tmp_3 <- tmp_3 %>%
+              distinct(EntityNumber, .keep_all = TRUE)
+ 
+  
+  
+# Summarise  
+  sum_1 <- tmp_3 %>%
+    group_by(PC) %>%
+    summarise(count = n(),
+            sum = sum(Total),
+            max = max(Total),
+            median = round(median(Total, na.rm = TRUE),0), 
+            std_dev = round(sd(Total, na.rm = TRUE),0)
+            )
+  
+  sum_1 <-  merge(sum_1, tmp_L1, by.x = "PC", by.y = "Code", all.x = TRUE)  %>%  
+              subset(select = c(NaceGroup_L1, count, sum, max, median, std_dev)) 
+
+# Depreciated
+# Get the names of the columns in the desired order
+# tmp_order.new <- c("NG1", "Label", "count", "sum", "max", "median", "std_dev")
+# Reorder the columns based on the new order
+  #sum_1 <- sum_1[tmp_order.new]
+
+# Clean up
+   #rm(list = ls(pattern="^tmp_"))
+    
+  
+  
+```
+
+```{r INL-10 tbl-summary-NC-Level2_B}
+#| label: tbl-summary-NC-Level2
+#| tbl-cap: "Ontvangen corronasubsidies per nace afdeling (Level 2)"
+#| tbl-cap-location: top
+
+# ______________________________________________________________________________
+# INL-10 summary-NC-Level2
+# KDT - 2024-01-09
+# functionality :
+# CREATE flextable Subsidies per nace afdeling (level 2) 
+# ______________________________________________________________________________  
+  
+# Flextable parameters
+  
+  big_border = fp_border(color="grey")
+  std_border = fp_border(color="grey90")
+
+  set_flextable_defaults(
+    font.family = "Calibri", font.size = 10.5, theme_fun = theme_vanilla,
+    padding =0, big.mark = " ", border.color = "grey", border.width = 1)
+
+  ft <-  flextable(sum_1)
+  ft <- valign(ft, valign = "bottom", part = "header")
+  ft <- align(ft, align = "right", part = "all")
+  ft <- align(ft, j = 1:1, align = "left", part = "all")
+  ft <- align(ft, j = 2:6, align = "right", part = "all")
+  ft <- height_all(ft, height = .25, unit = "cm")
+  ft <- padding(ft, padding = 1.5, part = "all")
+  ft <- padding(ft, j=1, padding.left = 4, part = "all")
+  ft <- padding(ft, j=2:6, padding.right = 4, part = "all")
+  
+  ft <- width(ft, j = 1 , width = 10, unit = "cm" )
+  ft <- width(ft, j = 2:4 , width = 2.2, unit = "cm" )
+  ft <- width(ft, j = 5:6 , width = 1.6, unit = "cm" )
+
+# ft <- border_outer(ft, part="all", border = big_border )
+
+# ft <- border_inner_v(ft, border = std_border )
+  ft <- border_outer(ft, part="all", border = big_border )
+  ft <- bg(ft, bg = "grey90", part = "header")
+
+  set_table_properties(
+    x = ft,
+    layout = "fixed",
+    width = 0.98,
+    align = "center",
+    opts_html = list(
+      scroll = list(
+        height = "600px", freeze_first_column = TRUE))
+  )
+
+ # Clean Up
+  rm(ft)
+  
+```
+
+## Variabliteit van de subsidies
+
+Als de ratio legis van de gewestelijke coronasubsidies er in bestond om de vaste kosten van de ondernemingen te dekken dan roept @fig-boxplot-nacecode-L2 toch vragen op.
+
+De boxplot toont dat veel ondernemingen een relatief kleine subsidie ontvingen en dat een beperkt aantal ondernemingen enorm bedrag aan steun ontvingen. Dat roept vragen op, gezien de grootste vaste kost, de personeelskost, door de Overheid ten laste genomen werd via de *Tijdelijk Werkloosheid.* Wat zijn dan die andere vaste kosten om torenhoge subsidies te rechtvaardigen? Als het de bedoeling was de dekking van de vaste kosten te ondersteunen, dan kunnen we enkel besluiten dat het criterium 'omzetdaling' niet relevant was . Dit gegeven bevestigt de hypothese dat de coronasubsidies niet efficiënt waren en dus een massale geldverspilling zijn geweest.
+
+@fig-boxplot-nacecode-L2 toont de spreiding van de subsidies per economische sector (Nacecode Level 2). Op de eerste lijn staan de ondernemingen waarvoor geen nacecode bekend (NU)[^1]. Het betreft een ontbrekende update bestand (zie melding onder paragraaf 'Bronnen').
+
+[^1]: Zie 1.6 Bronnen. Ontbrekende update bestand KBO
+
+::: column-body-outset-right
+
+```{r INL-11 boxplot nacecode-L2}
+#| label: fig-boxplot-nacecode-L2
+#| fig-cap: Boxplot van de toegekende coronasubsidies – per nace afdeling
+#| fig-cap-location: top
+#| fig-height: 8
+#| fig-width: 9
+
+# ______________________________________________________________________________
+# INL-10 boxplot & scatterplot nacecode-L2
+# KDT - 2024-01-09
+# functionality :
+# CREATE Boxplot & Scatterplot v/d toegekende coronasubsidies – per nace afdeling
+# ______________________________________________________________________________
+
+# Function definition : Custom function to truncate and append '...'
+  my_max_chars = 40
+  truncate_label <- function(Label, max_chars = my_max_chars) {
+    # Check for NA values
+    if (any(is.na(Label))) {
+      return(Label)  # Return NA values as is
+    }
+  
+    # Truncate and append '...' if needed
+    truncated_label <- ifelse(nchar(Label) > max_chars,
+                                     paste0(substr(Label, 1, max_chars), " ..."),
+                                     Label)
+    return(truncated_label)
+    }
+
+  tmp_3 <- tmp_3 %>%
+             mutate(NaceGroup_L1 = sapply(NaceGroup_L1, truncate_label))  
+  
+  
+# plotly - Boxplot van de toegekende coronasubsidies – per nacegroep  - V1
+# Create a boxplot
+  plt_3 <- plot_ly(
+    data = tmp_3,
+    x = ~PC,
+    y = ~Total,
+    type = 'box',
+    mode = 'markers',
+    color = ~NaceGroup_L1,
+    plot_bgcolor='#e5ecf6')
+    # plot_bgcolor='#e5ecf6',
+    # hovertemplate = 
+    #   'Entity: %{text}<br>NG: %{x}<br>Total: %{y:,.0f}', 
+    # hoverlabel = list(font = list(size = 11, color = ~NaceGroup_L1, family = 'Arial', textalign = 'left')),
+    # hoverinfo = 'x+y')
+  
+# Customize the y-axis tick format
+  plt_3 <- plt_3 %>%
+    layout(title = "Ontvangen subsidies per Nace groep - Boxplot",
+           margin = list(l=0, r=40, b=40, t=50, pad=0),
+           #title_text="<b>Number of Articles<br> </b>",
+           yaxis = list(title = "<span>Ontvangen subsidies <br> log-transformed scale log10 <br> </span>",
+                        tickformat = ",d",
+                        type = "log"),
+           xaxis = list(title = "Nace Groep Level 1"),
+           legend = list(title = list(text = '<b>Nace Groep</b>', y =-2, x= 1.10,  yanchor = "bottom"))) 
+  plt_3
+  
+  # rm(list = ls(pattern="(^plt_)")) 
+
+ 
+## Create a scatter plot
+  # plt_4 <- plot_ly(
+  #   data = tmp_3,
+  #   x = ~PC,
+  #   y = ~Total,
+  #   type = 'scatter',
+  #   mode = 'markers',
+  #   
+  #   text = ~EntityName,
+  #   color = ~NaceGroup_L1,
+  #   showlegend = TRUE,
+  #   plot_bgcolor='#e5ecf6')
+  #   hovertemplate = 
+  #     'Entity: %{text}<br>NG: %{x}<br>Total: %{y:,.0f}', 
+  #   hoverlabel = list(font = list(size = 11, color = ~NaceGroup_L1, family = 'Arial', textalign = 'left')),
+  #   hoverinfo = 'text+x+y'
+  # )
+
+#" Customize the y-axis tick format
+  # plt_4 <- plt_4 %>%
+  #   layout(title = "Ontvangen subsidies per Nace groep - Scatterplot",
+  #          margin = list(l=25, r=50, b=50, t=50, pad=0),
+  #         yaxis = list(title = "<span>Ontvangen subsidies <br> log-transformed scale log10 <br> </span>",
+  #                       tickformat = ",d",
+  #                       type = "log"),
+  #          xaxis = list(title = "Nace Groep Level 1"),
+  #          legend = list(title = list(text = '<b>Nace Groep</b>'), y =0.97, x= 1.05)) 
+  # plt_4
+ 
+ 
+ # Clean up
+   rm(list = ls(pattern="(^tmp_|^flt_|^chk_|^plt_|^rst|^sum_)"))
+
+```
+
+:::
+
+Dit is een test
+
+De meeste extreme uitschieters vinden we in volgende nace afdelingen :
+
+25: Vervaardiging van producten van metaal, exclusief machines en apparaten\
+59: Productie van films en video- en televisieprogramma 's, maken van geluidsopnemen, ...\
+70: Activiteiten van hoofdkantoren; adviesbureaus op het gebied van bedrijfsbeheer\
+79: Reisbureaus, reisorganisatoren, reserveringsbureaus en aanverwante activiteiten\
+82: Administratieve en ondersteunende activiteiten ten behoeve van kantoren ...\
+90: Creatieve activiteiten, kunst en amusement\

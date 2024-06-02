@@ -1,0 +1,91 @@
+project:
+  type: book
+
+book:
+  title: "Bedenkingen bij de Vlaamse Coronasubsidies"  
+  subtitle: "Over de inefficiëntie en het vermeend misbruik van de coronasubsidies, toegekend door het Vlaamse Gewest, aan de ondernemingen tijdens de Covid-19 pandemie"
+  author:
+  - name: Karel Detremerie
+    corresponding: true
+    email: karel.dt@telenet.be
+  date: last-modified
+  repo-url: https://github.com/kdt31075/81__Book-CS/
+  downloads: [pdf, epub]
+  sharing: [twitter, facebook]
+  
+  chapters:
+    - index.qmd
+    - 0_inleiding.qmd
+    - part: "Deel 1:  Beschrijving van de subsidies"
+      chapters:
+      - 1_01_Federale inkomensondersteuning.qmd
+      - 1_02_Gewestelijke coronasubsidies.qmd
+      - 1_03_Steuntrekkende entiteiten.qmd
+    - part: "Deel 2:  Vaststellingen en gevalstudies"
+      chapters: 
+      - 2_Religieuze organisaties.qmd
+      - 2_Sportorganisaties.qmd
+      - 2_Starters.qmd
+      - 2_De neurologen.qmd
+      - 2_Zombies en spoken.qmd
+      - 2_Horeca.qmd
+      - 2_Dienstverleners.qmd
+      - 2_Dividend uitkeerders.qmd
+      
+  sidebar:
+    style: "floating"
+    search: true
+    alignment: left
+    border: true
+    logo: cover.png
+    
+comments:
+  hypothesis: true
+  
+bibliography: references.bib
+cls: /03__Coronasubsidies/81__Book/-CS/chicago-fullnote-bibliography-no-em-dash.csl
+
+notebook-links: true
+lang: nl
+output: html_document 
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    number-sections: true
+    toc-title: Inhoudstafel
+    toc: true
+    toc_float: true
+    toc-depth: 5
+    page-layout: full
+    #embed-resources: true
+    #self-contained-math: true
+    toc-expand: true
+    code-fold: true
+    code-link: true
+    #fig-width: 6
+    #fig-height: 5
+
+grid:
+  body-width: 1050px
+  margin-width: 350px
+  sidebar-width: 350px
+  gutter-width: 4em
+
+reference-location: margin
+citation-location: margin
+echo:  false
+warning:  false
+message: false   
+freeze: auto
+cache: true
+editor: source
+editor_options: 
+  chunk_output_type: console
+  
+website:
+  favicon: cover.png
+  twitter-card: true
+  site-url: https://github.com/kdt31075/81__Book-CS/index.qmd  
+  
